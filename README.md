@@ -7,6 +7,9 @@ This is the clean code project of the Udacity Machine Learning Engineer Nanodegr
 
 ## Files and data description
 Overview of the files and data present in the root directory. 
+
+```
+
 ├── README.md
 ├── churn_library.py - The basic functions for the project
 ├── churn_notebook.ipynb - The notebook for the project
@@ -38,7 +41,7 @@ Overview of the files and data present in the root directory.
     ├── marital_status_distribution.png
     └── total_transition_distribution.png
 
-
+```
 
 ## Running Files
 How do you run your files? What should happen when you run your files?
