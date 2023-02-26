@@ -4,7 +4,7 @@ Churn Prediction Library
 
 Author: Marc
 """
-
+import warnings
 # import libraries
 import logging
 import os
@@ -21,6 +21,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, plot_roc_curve
 from sklearn.model_selection import GridSearchCV, train_test_split
 
+warnings.simplefilter(action='ignore')
 sns.set()
 
 
@@ -275,19 +276,19 @@ def train_save_models(x_train, y_train):
             None
     '''
     # grid search
-    rfc = RandomForestClassifier(random_state=42, verbose=True, n_jobs=12)
+    rfc = RandomForestClassifier(random_state=42, verbose=0, n_jobs=12)
     # Use a different solver if the default 'lbfgs' fails to converge
     # Reference:
     # https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
     lrc = LogisticRegression(
         solver='lbfgs',
         max_iter=3000,
-        verbose=True,
+        verbose=0,
         n_jobs=12)
 
     param_grid = {
         'n_estimators': [200, 500],
-        'max_features': ['auto', 'sqrt'],
+        'max_features': ['sqrt'], # removing auto because it is sqrt
         'max_depth': [4, 5, 100],
         'criterion': ['gini', 'entropy']
     }
@@ -296,7 +297,7 @@ def train_save_models(x_train, y_train):
         estimator=rfc,
         param_grid=param_grid,
         cv=5,
-        verbose=True,
+        verbose=0,
         n_jobs=12)
     cv_rfc.fit(x_train, y_train)
 
@@ -309,7 +310,7 @@ def train_save_models(x_train, y_train):
     return lrc, cv_rfc
 
 
-def test_model(x_train, x_test, cv_rfc, lrc) -> List:
+def model_predictions(x_train, x_test, cv_rfc, lrc) -> List:
     '''
     test model on test data
     input:
@@ -398,7 +399,7 @@ if __name__ == "__main__":
     logging.info("SUCCESS: Models trained & saved.")
 
     # test models
-    PREDICTIONS = test_model(
+    PREDICTIONS = model_predictions(
         X_TRAIN, X_TEST, RF_MODEL, LR_MODEL)
     logging.info("SUCCESS: Models tested.")
 
